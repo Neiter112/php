@@ -1,63 +1,9 @@
-let minValue = parseInt(prompt('Минимальное знание числа для игры','0'));
-let maxValue = parseInt(prompt('Максимальное знание числа для игры','100'));
+let minValue = parseInt(prompt('Минимальное знание числа для игры','-999'));
+let maxValue = parseInt(prompt('Максимальное знание числа для игры','999'));
 alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
 let answerNumber  = Math.floor((minValue + maxValue) / 2);
 let orderNumber = 1;
 let gameRun = true;
-
-let hundres = ['', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
-let teens = ['десять', 'одинадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
-let tens = ['','', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
-let numbers = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
-let numberInt;
-let numberRest;
-let numberIntTen;
-let numberRestTen;
-
-function numberToWord() { 
-    let number = Math.abs(answerNumber);
-    let text = '';
-
-    if (number == 0) {
-        text = 'ноль';
-        return text;
-    }
-    
-    if (number <= 9) {
-        text = numbers[number];
-        return text;
-    }
-
-    if (number >= 100){      
-        numberInt = parseInt(number / 100); 
-        numberRest = parseInt(number % 100);
-        text = hundres[parseInt(numberInt)];
-    } else {
-        numberRest = parseInt(number);    
-    }
-    
-    if (numberRest >= 10) 
-        {
-        numberIntTen = parseInt(numberRest / 10); 
-        numberRestTen = parseInt(numberRest % 10);
-            if (parseInt(numberIntTen) == 1)  
-                {
-                text += ' ' + teens[parseInt(numberRestTen)];
-                return text;      
-                } else {
-        text += ' ' + tens[parseInt(numberIntTen)];
-        } 
-        } else
-    numberRestTen = parseInt(numberRest);
-    text += ' ' + numbers[parseInt(numberRestTen)]; 
-    return text;
-};
-
-const orderNumberField = document.getElementById('orderNumberField');
-const answerField = document.getElementById('answerField');
-
-orderNumberField.innerText = orderNumber;
-answerField.innerText = `Вы загадали число ${answerNumber }?`;
 
 document.getElementById('btnOver').addEventListener('click', function () {    // Кнопка больше
     if (gameRun){
@@ -163,26 +109,34 @@ document.getElementById('btnLess').addEventListener('click', function () {   //�
 
 document.getElementById('btnEqual').addEventListener('click', function () {
     if (gameRun){
-        answerField.innerText = `Я всегда угадываю\n\u{1F60E}`
+        const phraseRandom = Math.round( Math.random() * 3);
+        if (phraseRandom == 0) {
+            answerPhrase  = `Я всегда угадываю\n\u{1F60E}`;
+        } else
+        if (phraseRandom == 1) {
+            answerPhrase = `Это было легко\n\u{1F60E}`;
+        } else
+        if (phraseRandom == 2) {
+            answerPhrase  = `Бинго!\n\u{1F60E}`;
+        } else
+        if (phraseRandom == 3) {
+            answerPhrase  = `Я знаю всё!\n\u{1F60E}`;
+        } 
+        answerField.innerText = answerPhrase;
         gameRun = false;
     }
 })
 
-document.getElementById('btnRetry').addEventListener('click', function () { //Описание работы кнопки заново
-        minValue.value = (minValue.value <= -999) ? minValue.value = -999 : (minValue.value >= 999) ? minValue.value = 999 : minValue.value;
-        maxValue.value = (maxValue.value >= 999) ? maxValue.value = 999 : (maxValue.value <= -999) ? maxValue.value = -999 : maxValue.value;
-        if (parseInt(maxValue.value) < parseInt(minValue.value)) {
-            [maxValue.value, minValue.value] = [minValue.value, maxValue.value]; // Значения меняются местами если max меньше min.
-        }
-        if (isNaN(maxValue.value) || isNaN(minValue.value) || maxValue.value == '' || minValue.value == '') {
-            minValue.value = -999;
-            maxValue.value = 999;
-        }
+document.getElementById('btnRetry').addEventListener('click', function () { //Кнопка Заново
+    minValue = (minValue <= -999) ? minValue = -999 : (minValue >= 999) ? minValue = 999 : minValue;
+    maxValue = (maxValue >= 999) ? maxValue = 999 : (maxValue <= -999) ? maxValue = -999 : maxValue;
     answerNumber = Math.floor((parseInt(minValue) + parseInt(maxValue)) / 2);
     orderNumber = 1;
     gameRun = true;
 
+    const orderNumberField = document.getElementById('orderNumberField'); // Скидыввается № Вопроса
+    const answerField = document.getElementById('answerField'); 
+    
     orderNumberField.innerText = orderNumber;
     answerField.innerText = `Вы загадали число ${answerNumber}?`;
-
-})
+}) 
